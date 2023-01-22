@@ -1,5 +1,4 @@
 ﻿Id: gerren-mindgame
-AddonId: gerren-mindgame
 Name: MindGame - Find a game to play
 Author: Gerren
 Version: 1.02
@@ -11,10 +10,3 @@ Links:
       Url: https://github.com/Gerren/Playnite-MindGame
     - Name: Forum
       Url: https://playnite.link/forum/thread-1406.html
-Packages:
-  - Version: 1.02
-    RequiredApiVersion: 6.2.0
-    ReleaseDate: 2023-01-22
-    PackageUrl: https://github.com/Gerren/Playnite-MindGame/releases/download/release_1_02/gerren-mindgame_1_02.pext
-    Changelog:
-      - First public edition
