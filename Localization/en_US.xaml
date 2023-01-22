@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="LOCMindGameTitle">Mind Game</sys:String>
+    <sys:String x:Key="LOCMindGameUseFields">Use following fields:</sys:String>
+    <sys:String x:Key="LOCMindGameClearIgnoredFields">Clear</sys:String>
+    <sys:String x:Key="LOCMindGameHas">Has</sys:String>
+    <sys:String x:Key="LOCMindGameHasNot">Has not</sys:String>
+    <sys:String x:Key="LOCMindGameDoesNotMatter">Does not matter</sys:String>
+    <sys:String x:Key="LOCMindGameHasPrompt">Want</sys:String>
+    <sys:String x:Key="LOCMindGameHasNotPrompt">Don't want</sys:String>
+    <sys:String x:Key="LOCMindGameDoesNotMatterPrompt">I don't mind</sys:String>
+    <sys:String x:Key="LOCMindGameNeverPrompt">Don't show again</sys:String>
+    <sys:String x:Key="LOCMindGameStartAgain">Start again</sys:String>
+</ResourceDictionary>
