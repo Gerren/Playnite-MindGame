@@ -1,4 +1,6 @@
 # Playnite-MindGame
+[Forum](https://playnite.link/forum/thread-1406.html)
+
 Don't you know what to play? Look no more. This [Playinte](https://playnite.link/) ([GitHub](https://github.com/JosefNemec/Playnite/)) extension will help you find a game.
 
 If you remember [Akinator](https://en.akinator.com/) (yes, it still exists), this extension will let you ask simple questions, and it will narrow down your endless collection of games.
