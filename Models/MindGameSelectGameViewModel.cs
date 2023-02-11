@@ -46,7 +46,29 @@ namespace MindGame.Models
                 API.Instance.MainView.SelectGame(Id);
                 API.Instance.MainView.SwitchToLibraryView();
             });
+            _RemoveCondition = new RelayCommand<Guid>((Id) =>
+            {
+                MindGameCondition condition = conditions.First(cond => cond.Id == Id);
+                conditions.Remove(condition);
+                Next();
+            });
+
+            prompts = new string[] {ResourceProvider.GetString("LOCMindGamePrompt1"),
+                ResourceProvider.GetString("LOCMindGamePrompt2"),
+                ResourceProvider.GetString("LOCMindGamePrompt3"),
+                ResourceProvider.GetString("LOCMindGamePrompt4"),
+                ResourceProvider.GetString("LOCMindGamePrompt5"),
+                ResourceProvider.GetString("LOCMindGamePrompt6"),
+                ResourceProvider.GetString("LOCMindGamePrompt7"),
+            };
         }
+
+        private void RollPrompt()=>Prompt=prompts[random.Next(prompts.Length)];
+
+        private string[] prompts;
+        private RelayCommand<Guid> _RemoveCondition;
+
+        public string Prompt { get; set; }
 
         public void ReadGames()
         {
@@ -75,52 +97,80 @@ namespace MindGame.Models
             Next();
         }
 
+        private class LeaderType
+        {
+            public Guid id;
+            public int count =0;
+            public IMindGameProperty type;
+            public Game game;
+        }
+
         public void Next()
         {
-            int retries = 20;
-            Guid? value = null;
-            IMindGameProperty type = null;
-            Game game = null;
-            while (retries-- > 0)
+            if (games.Count == 0) return;
+
+            RollPrompt();
+            OnPropertyChanged(nameof(Prompt));
+
+            Dictionary<Guid, LeaderType> leaders = new Dictionary<Guid, LeaderType>();
+
+            foreach (Game game in Games.OrderBy(g=>Guid.NewGuid()))
             {
-                if (Games.Count == 0) break;
-                game = Games[random.Next(0, Games.Count)];
-
-                type = 
-                    app.PropertyTypes
-                    .Where(p => p.IsAllowed(app.Settings))
-                    .OrderBy(x => Guid.NewGuid())
-                    .FirstOrDefault();
-
-                if (type == null)
+                app.PropertyTypes
+                .Where(p => p.IsAllowed(app.Settings))
+                .ForEach(p => p.GetIds(game).ForEach(id =>
                 {
-                    game = null;
-                    continue;
+                    if (id == null) return;
+                    if (p.GetValue(id) == null) return;
+                    if (conditions.Any(c => c.Id == id)) return;
+                    if (app.Data.Contains(p.Name, id)) return;
+                    LeaderType leader = null;
+                    if(leaders.TryGetValue(id, out LeaderType found)) leader = found;
+                    if (leader == null)
+                    {
+                        leader = new LeaderType
+                        {
+                            id = id,
+                            game = game,
+                            type = p
+                        };
+                        leaders.Add(id, leader);
+                    }
+                    leader.count++;
                 }
-
-                value = type
-                    .GetIds(game)
-                    .Distinct()
-                    .Where(v => !conditions.Any((c) => c.Type.Name == type.Name && c.Id == v)
-                            && !app.Data.Contains(type.Name, v))
-                    .OrderBy(v => Guid.NewGuid())
-                    .FirstOrDefault();
-
-                if (value == null || value == Guid.Empty)
-                {
-                    value = null;
-                    game = null;
-                    type = null;
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(type.GetValue(value.Value))) continue;
-
-                break;
+                ));
             }
-            Game = game;
-            CurrentCondition.Type= type;
-            CurrentCondition.Id = value;
+
+            int negative = 1;
+            foreach(MindGameCondition condition in conditions.Reverse())
+            {
+                switch (condition.ConditionOperator.Value)
+                {
+                    case MindGameCondition.ConditionOperatorType.Has:
+                        break;
+                    default:
+                        negative++;
+                        continue;
+                }
+            }
+
+            int len = games.Count/5; // take inversely many, as is percentage of negative or tenative answers.
+            if(len > 20) len= 20;
+            len /= negative;
+            if (len < 5) len = 5;
+
+
+            LeaderType topLeader = 
+                leaders.Values
+                    .OrderBy((_) => Guid.NewGuid())
+                    .OrderBy(leader => Math.Abs(leader.count - games.Count/2)) // the closer to middle, the better
+                    .Take(len)
+                    .OrderBy((_) => Guid.NewGuid())
+                    .FirstOrDefault();
+
+            Game = topLeader.game;
+            CurrentCondition.Type= topLeader.type;
+            CurrentCondition.Id = topLeader.id;
         }
 
         internal void OptionSelected(string name)
@@ -162,6 +212,11 @@ namespace MindGame.Models
         {
             get => _GoToGame;
             set => _GoToGame = value;
+        }
+        public RelayCommand<Guid> RemoveCondition
+        {
+            get => _RemoveCondition;
+            set => _RemoveCondition = value;
         }
     }
 }

@@ -12,4 +12,12 @@
     <sys:String x:Key="LOCMindGameDoesNotMatterPrompt">I don't mind</sys:String>
     <sys:String x:Key="LOCMindGameNeverPrompt">Don't show again</sys:String>
     <sys:String x:Key="LOCMindGameStartAgain">Start again</sys:String>
+    <sys:String x:Key="LOCMindGamePrompt1">Would you like</sys:String>
+    <sys:String x:Key="LOCMindGamePrompt2">Should the game have</sys:String>
+    <sys:String x:Key="LOCMindGamePrompt3">What would you say to</sys:String>
+    <sys:String x:Key="LOCMindGamePrompt4">Maybe</sys:String>
+    <sys:String x:Key="LOCMindGamePrompt5">You'll defintely like...</sys:String>
+    <sys:String x:Key="LOCMindGamePrompt6">Are you thinking about</sys:String>
+    <sys:String x:Key="LOCMindGamePrompt7">Do I read stars right, is it</sys:String>
+    <sys:String x:Key="LOCMindGameSelectedGame">Randomly picked game based on current filter:</sys:String>
 </ResourceDictionary>

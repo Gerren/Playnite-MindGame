@@ -58,7 +58,7 @@ namespace MindGame
                 Title = ResourceProvider.GetString("LOCMindGameTitle");
                 Icon = new TextBlock
                 {
-                    Text = "?",
+                    Text = "🎲",
                     FontSize = 22,
                 };
                 Opened = () =>

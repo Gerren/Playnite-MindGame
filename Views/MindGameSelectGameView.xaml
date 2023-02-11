@@ -17,47 +17,58 @@
     <Grid Margin="25">
         <Grid.RowDefinitions>
             <!--Image-->
-            <RowDefinition Height="10*" />
+            <RowDefinition Height="8*" />
             <!--Title-->
-            <RowDefinition Height="1*"  MaxHeight="30" />
-            <!--Title-->
-            <RowDefinition Height="1*" MaxHeight="20" />
+            <RowDefinition Height="Auto" MaxHeight="30" />
             <!--Filter prompt-->
-            <RowDefinition Height="1.5*"  MaxHeight="40" />
+            <RowDefinition Height="Auto"  MaxHeight="40" />
             <!--Lists-->
             <RowDefinition Height="10*" />
             <!--Start again-->
-            <RowDefinition Height="1.5*"  MaxHeight="40" />
+            <RowDefinition Height="Auto"  MaxHeight="40" />
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" HorizontalAlignment="Center" MinWidth="120">
-            <Image Source="{Binding Game.CoverImage, Converter={StaticResource PlayniteImageConverter}, IsAsync=True}">
-                <Image.InputBindings>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding GoToGame}" CommandParameter="{Binding Game.Id}" />
-                </Image.InputBindings>
-            </Image>
+        <Border Grid.Row="0" HorizontalAlignment="Center" MinWidth="120"  BorderThickness="1" BorderBrush="{DynamicResource NormalBorderBrush}" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <!--Title-->
+                    <RowDefinition Height="Auto"/>
+                    <!--Image-->
+                    <RowDefinition Height="*" />
+                    <!--Title-->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{DynamicResource LOCMindGameSelectedGame}" 
+                           Style="{DynamicResource BaseTextBlockStyle}" HorizontalAlignment="Center" />
+                <Image Source="{Binding Game.CoverImage, Converter={StaticResource PlayniteImageConverter}, IsAsync=True}" Grid.Row="1">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding GoToGame}" CommandParameter="{Binding Game.Id}" />
+                    </Image.InputBindings>
+                </Image>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,6,0,0">
+                    <TextBlock Text="{Binding Game.Name}" d:Text="Path of Exile" HorizontalAlignment="Center"
+                           Style="{DynamicResource BaseTextBlockStyle}" >
+                        <TextBlock.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding GoToGame}" CommandParameter="{Binding Game.Id}" />
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
         </Border>
-        <TextBlock Grid.Row="1" Text="{Binding Game.Name}" d:Text="Path of Exile" HorizontalAlignment="Center"
-                       Style="{DynamicResource BaseTextBlockStyle}" >
-            <TextBlock.InputBindings>
-                <MouseBinding Gesture="LeftClick" Command="{Binding GoToGame}" CommandParameter="{Binding Game.Id}" />
-            </TextBlock.InputBindings>
-        </TextBlock>
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <TextBlock Text="{Binding CurrentCondition.Type.Label}" d:Text="Feature"
-                       Style="{DynamicResource BaseTextBlockStyle}"/>
-            <TextBlock Text=":" Margin="{DynamicResource TextBlockMargin1}"
-                       Style="{DynamicResource BaseTextBlockStyle}"/>
-            <TextBlock Text="{Binding CurrentCondition.Value}" d:Text="Local multiplayer" Margin="{DynamicResource TextBlockMargin1}"
-                       Style="{DynamicResource BaseTextBlockStyle}"/>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+            <TextBlock Text="{Binding Prompt}" d:Text="Would you like"  Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Bottom" Padding="0,0,15,0"/>
+            <TextBlock Text="{Binding CurrentCondition.Type.Label}" d:Text="Feature"                       Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarger}" FontWeight="Bold" VerticalAlignment="Bottom"/>
+            <TextBlock Text=" => " Margin="{DynamicResource TextBlockMargin1}"                       Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Bottom"/>
+            <TextBlock Text="{Binding CurrentCondition.Value}" d:Text="Local multiplayer" Margin="{DynamicResource TextBlockMargin1}"                       Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarger}" FontWeight="Bold" VerticalAlignment="Bottom"/>
+            <TextBlock Text="?"  Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" Padding="5,0,0,0"  VerticalAlignment="Bottom"/>
         </StackPanel>
-        <StackPanel Grid.Row="3" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
             <Button x:Name="Yes" Click="Select" Content="{DynamicResource LOCMindGameHasPrompt}" d:Content="Want" Margin="{DynamicResource TextBlockMargin1}" Padding="{DynamicResource ButtonPadding1}"/>
             <Button x:Name="Maybe" Click="Select" Content="{DynamicResource LOCMindGameDoesNotMatterPrompt}" d:Content="I don't mind" Margin="{DynamicResource TextBlockMargin1}" Padding="{DynamicResource ButtonPadding1}"/>
             <Button x:Name="No" Click="Select" Content="{DynamicResource LOCMindGameHasNotPrompt}" d:Content="Don't want" Margin="{DynamicResource TextBlockMargin1}"  Padding="{DynamicResource ButtonPadding1}"/>
             <Button Click="Ignore" Content="{DynamicResource LOCMindGameNeverPrompt}" d:Content="Ignore"  Margin="{DynamicResource TextBlockMargin1}" Padding="{DynamicResource ButtonPadding1}"/>
             <Button Click="Another" Content="{DynamicResource LOCRandomGamePickAnother}"  d:Content="Pick another" Padding="{DynamicResource ButtonPadding1}"/>
         </StackPanel>
-        <Grid Grid.Row="4" Margin="10">
+        <Grid Grid.Row="3" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
@@ -124,7 +135,7 @@
             </Grid>
         </Grid>
 
-        <StackPanel Grid.Row="5" HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Row="4" HorizontalAlignment="Center" Orientation="Horizontal">
             <Button Content="{DynamicResource LOCMindGameStartAgain}" d:Content="Start again" Padding="{DynamicResource ButtonPadding1}" Click="StartAgain"/>
         </StackPanel>
     </Grid>
