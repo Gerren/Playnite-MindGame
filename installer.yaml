@@ -3,7 +3,7 @@ Packages:
   - Version: 1.04
     RequiredApiVersion: 6.8.0
     ReleaseDate: 2023-01-22
-    PackageUrl: https://github.com/Gerren/Playnite-MindGame/releases/download/release_1_02/gerren-mindgame_1_04.pext
+    PackageUrl: https://github.com/Gerren/Playnite-MindGame/releases/download/release_1_04/gerren-mindgame_1_04.pext
     Changelog:
       - Binary search
       - Adjusted styles

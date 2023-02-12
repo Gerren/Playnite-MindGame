@@ -1,0 +1,14 @@
+﻿    -	update API nuget
+        - when done, update manifest extension.yaml
+    -	development
+    -	test on local
+        - settings -> devs -> enable/add path to debug
+    -	change version
+        -	extension.yaml
+        -	installer.yaml
+            -	version itself
+            -	link to file
+    -	run publish.bat
+    -	commit
+    -	run verify.bat
+    -	publish on github
