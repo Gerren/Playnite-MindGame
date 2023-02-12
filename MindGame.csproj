@@ -54,6 +54,7 @@
     <Compile Include="GameProperties\MindGameFeature.cs" />
     <Compile Include="GameProperties\MindGameTag.cs" />
     <Compile Include="GameProperties\MindGameCategory.cs" />
+    <Compile Include="Models\QuestionVisibleConverter.cs" />
     <Compile Include="PlayniteImageConverter.cs" />
     <Compile Include="PlayniteImageTaskConverter.cs" />
     <Compile Include="MindGame.cs" />

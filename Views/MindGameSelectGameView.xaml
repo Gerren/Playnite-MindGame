@@ -4,15 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:models="clr-namespace:MindGame.Models"
-             xmlns:MindGame="clr-namespace:MindGame" xmlns:local="clr-namespace:MindGame.Views" x:Class="MindGame.Views.MindGameSelectGameView"
+             xmlns:MindGame="clr-namespace:MindGame" xmlns:local="clr-namespace:MindGame.Views" xmlns:system="clr-namespace:System;assembly=mscorlib" x:Class="MindGame.Views.MindGameSelectGameView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type={x:Type models:MindGameSelectGameViewModel}}"
     >
     <PluginUserControl.Resources>
+        <models:QuestionVisibleConverter x:Key="QuestionVisibleConverter"/>
         <MindGame:PlayniteImageConverter x:Key="PlayniteImageConverter"/>
         <Thickness x:Key="TextBlockMargin1">0,0,3,0</Thickness>
         <Thickness x:Key="ButtonPadding1">5,1,5,1</Thickness>
+        <system:Boolean x:Key="Inverted">true</system:Boolean>
     </PluginUserControl.Resources>
     <Grid Margin="25">
         <Grid.RowDefinitions>
@@ -54,14 +56,17 @@
                 </StackPanel>
             </Grid>
         </Border>
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal"  Visibility="{Binding NoMore, Converter={StaticResource QuestionVisibleConverter}, Mode=OneWay}">
             <TextBlock Text="{Binding Prompt}" d:Text="Would you like"  Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Bottom" Padding="0,0,15,0"/>
             <TextBlock Text="{Binding CurrentCondition.Type.Label}" d:Text="Feature"                       Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarger}" FontWeight="Bold" VerticalAlignment="Bottom"/>
             <TextBlock Text=" => " Margin="{DynamicResource TextBlockMargin1}"                       Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Bottom"/>
             <TextBlock Text="{Binding CurrentCondition.Value}" d:Text="Local multiplayer" Margin="{DynamicResource TextBlockMargin1}"                       Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarger}" FontWeight="Bold" VerticalAlignment="Bottom"/>
             <TextBlock Text="?"  Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" Padding="5,0,0,0"  VerticalAlignment="Bottom"/>
         </StackPanel>
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="{Binding NoMore, Converter={StaticResource QuestionVisibleConverter}, ConverterParameter={StaticResource Inverted}, Mode=OneWay}" >
+            <TextBlock Text="{StaticResource LOCMindGameFound}" d:Text="Found it!"  Style="{DynamicResource BaseTextBlockStyle}" FontSize="{DynamicResource FontSizeLarger}" FontWeight="Bold" VerticalAlignment="Bottom" d:Visibility="Hidden"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5"  Visibility="{Binding NoMore, Converter={StaticResource QuestionVisibleConverter}, Mode=OneWay}">
             <Button x:Name="Yes" Click="Select" Content="{DynamicResource LOCMindGameHasPrompt}" d:Content="Want" Margin="{DynamicResource TextBlockMargin1}" Padding="{DynamicResource ButtonPadding1}"/>
             <Button x:Name="Maybe" Click="Select" Content="{DynamicResource LOCMindGameDoesNotMatterPrompt}" d:Content="I don't mind" Margin="{DynamicResource TextBlockMargin1}" Padding="{DynamicResource ButtonPadding1}"/>
             <Button x:Name="No" Click="Select" Content="{DynamicResource LOCMindGameHasNotPrompt}" d:Content="Don't want" Margin="{DynamicResource TextBlockMargin1}"  Padding="{DynamicResource ButtonPadding1}"/>

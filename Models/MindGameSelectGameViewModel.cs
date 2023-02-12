@@ -25,13 +25,14 @@ namespace MindGame.Models
         public ObservableCollection<MindGameCondition> Conditions { get => conditions; set => SetValue(ref conditions, value); }
         public MindGameCondition CurrentCondition { get => currentCondition; set => SetValue(ref currentCondition, value); }
 
-        public ObservableCollection<Game> Games {get => games; set =>SetValue(ref games, value);}
-        public Game Game { get => game; set => SetValue(ref game,value); }
+        public ObservableCollection<Game> Games { get => games; set => SetValue(ref games, value); }
+        public Game Game { get => game; set => SetValue(ref game, value); }
 
         public bool HasGame => games.Any();
 
         internal void Init()
         {
+            NoMore = false;
             ReadGames();
             conditions.Clear();
             Next();
@@ -63,10 +64,11 @@ namespace MindGame.Models
             };
         }
 
-        private void RollPrompt()=>Prompt=prompts[random.Next(prompts.Length)];
+        private void RollPrompt() => Prompt = prompts[random.Next(prompts.Length)];
 
         private string[] prompts;
         private RelayCommand<Guid> _RemoveCondition;
+        private bool noMore;
 
         public string Prompt { get; set; }
 
@@ -100,7 +102,7 @@ namespace MindGame.Models
         private class LeaderType
         {
             public Guid id;
-            public int count =0;
+            public int count = 0;
             public IMindGameProperty type;
             public Game game;
         }
@@ -114,7 +116,7 @@ namespace MindGame.Models
 
             Dictionary<Guid, LeaderType> leaders = new Dictionary<Guid, LeaderType>();
 
-            foreach (Game game in Games.OrderBy(g=>Guid.NewGuid()))
+            foreach (Game game in Games.OrderBy(g => Guid.NewGuid()))
             {
                 app.PropertyTypes
                 .Where(p => p.IsAllowed(app.Settings))
@@ -125,7 +127,7 @@ namespace MindGame.Models
                     if (conditions.Any(c => c.Id == id)) return;
                     if (app.Data.Contains(p.Name, id)) return;
                     LeaderType leader = null;
-                    if(leaders.TryGetValue(id, out LeaderType found)) leader = found;
+                    if (leaders.TryGetValue(id, out LeaderType found)) leader = found;
                     if (leader == null)
                     {
                         leader = new LeaderType
@@ -142,7 +144,7 @@ namespace MindGame.Models
             }
 
             int negative = 1;
-            foreach(MindGameCondition condition in conditions.Reverse())
+            foreach (MindGameCondition condition in conditions.Reverse())
             {
                 switch (condition.ConditionOperator.Value)
                 {
@@ -154,28 +156,39 @@ namespace MindGame.Models
                 }
             }
 
-            int len = games.Count/5; // take inversely many, as is percentage of negative or tenative answers.
-            if(len > 20) len= 20;
+            int len = games.Count / 5; // take inversely many, as is percentage of negative or tenative answers.
+            if (len > 20) len = 20;
             len /= negative;
             if (len < 5) len = 5;
 
 
-            LeaderType topLeader = 
+            LeaderType topLeader =
                 leaders.Values
                     .OrderBy((_) => Guid.NewGuid())
-                    .OrderBy(leader => Math.Abs(leader.count - games.Count/2)) // the closer to middle, the better
+                    .OrderBy(leader => Math.Abs(leader.count - games.Count / 2)) // the closer to middle, the better
                     .Take(len)
                     .OrderBy((_) => Guid.NewGuid())
                     .FirstOrDefault();
 
+            if (topLeader == null)
+            {
+                NoMore = true;
+                return;
+            }
+
             Game = topLeader.game;
-            CurrentCondition.Type= topLeader.type;
+            CurrentCondition.Type = topLeader.type;
             CurrentCondition.Id = topLeader.id;
         }
 
         internal void OptionSelected(string name)
         {
-            if (games.Count <= 1) return;
+            if (games.Count <= 1)
+            {
+                NoMore = true;
+                return;
+            }
+
             switch (name)
             {
                 case "Yes":
@@ -204,6 +217,12 @@ namespace MindGame.Models
                 }
                 i++;
             }
+            if (games.Count == 1)
+            {
+                Game=games[0];
+                NoMore = true;
+                return;
+            }
             CurrentCondition = new MindGameCondition();
             Next();
         }
@@ -218,5 +237,6 @@ namespace MindGame.Models
             get => _RemoveCondition;
             set => _RemoveCondition = value;
         }
+        public bool NoMore { get => noMore; private set => SetValue(ref noMore, value); }
     }
 }

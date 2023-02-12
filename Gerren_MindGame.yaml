@@ -4,12 +4,16 @@ Author: 'Gerren'
 Type: Generic
 ShortDescription: Answer a pair of siple questions, and you'll have game to play in no time. 
 Description: |-
-    Don't you know what to play? Tired to browse your library with no luck? Cannot choose and the built-in random selector doesn't suit you? Look no more. This Playinte extension will help you find a game.
+    Don't you know what to play? Too tired to browse your library with no luck? Cannot choose and the built-in random selector doesn't suit you? Look no more. This Playinte extension will help you find a game.
 
-    If you remember the famous fortune teller, oracle one might say, Akinator (yes, it still exists), this extension will let you ask simple questions, and it will narrow down your endless collection of games.'
-Tags: ["Library","Browse"]
+    If you remember the famous fortune teller, oracle one might say, Akinator (yes, it still exists), this extension will let you ask simple questions, and it will narrow down your endless collection of games.
+Tags: ["Library","Browse","Random"]
 SourceUrl: 'https://github.com/Gerren/Playnite-MindGame'
 InstallerManifestUrl: https://raw.githubusercontent.com/Gerren/Playnite-MindGame/master/installer.yaml
 Links:
     GitHub: https://github.com/Gerren/Playnite-MindGame
     Forum: https://playnite.link/forum/thread-1406.html
+Screenshots:
+    - Thumbnail: https://raw.githubusercontent.com/Gerren/Playnite-MindGame/master/thumb.png
+      Image: https://raw.githubusercontent.com/Gerren/Playnite-MindGame/master/mindgame.png
+IconUrl: https://raw.githubusercontent.com/Gerren/Playnite-MindGame/master/icons8-magic-crystal-ball-80-invert.png
