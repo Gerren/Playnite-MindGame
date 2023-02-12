@@ -48,7 +48,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="validate.bat" />
+    <None Include="publish.bat" />
     <Compile Include="GameProperties\MindGameCompletion.cs" />
     <Compile Include="GameProperties\MindGameFeature.cs" />
     <Compile Include="GameProperties\MindGameTag.cs" />
