@@ -13,7 +13,7 @@ If you remember [Akinator](https://en.akinator.com/) (yes, it still exists), thi
 The extension works best when the metadata of your games are well maintained. I strongly recommend puting your library together using Lacro59's [LibraryManager](https://github.com/Lacro59/playnite-librarymanagement-plugin)
 
 ## Links:
-* [Forum](https://playnite.link/forum/thread-1406.html
-* [Addon Page](https://playnite.link/addons.html#gerren-mindgame
+* [Forum](https://playnite.link/forum/thread-1406.html)
+* [Addon Page](https://playnite.link/addons.html#gerren-mindgame)
 
 ![mindgame](https://raw.githubusercontent.com/Gerren/Playnite-MindGame/master/mindgame.png)
