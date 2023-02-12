@@ -9,6 +9,7 @@
             -	version itself
             -	filename in link
             -	release version
+    -   update release date in installer.yaml
     -	commit
     -	run publish.bat
     -	publish on github
