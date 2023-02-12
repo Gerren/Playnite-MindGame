@@ -1,5 +1,5 @@
 ﻿    -	update API nuget
-        - when done, update manifest extension.yaml
+        - when done, update manifest installer.yaml
     -	development
     -	test on local
         - settings -> devs -> enable/add path to debug
