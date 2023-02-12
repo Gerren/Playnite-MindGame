@@ -1,9 +1,12 @@
-﻿- update API nuget
+﻿
+BEWARE! ALL STEPS MUST BE DONE IN ORDER TO PUBLISH CORRECTLY
+
+- update API nuget
   - when done, update manifest installer.yaml
 - development
 - test on local
   - settings -> devs -> enable/add path to debug
-- change version
+- change version (4x)
   -	extension.yaml
   -	installer.yaml
 	- version itself
@@ -13,6 +16,6 @@
   - update release date
   - update changelog
 - commit
-- run publish.bat
+- run publish.bat				< YOU ARE HERE
 - publish on github
 - run verify.bat
