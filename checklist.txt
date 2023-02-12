@@ -7,8 +7,9 @@
         -	extension.yaml
         -	installer.yaml
             -	version itself
-            -	link to file
-    -	run publish.bat
+            -	filename in link
+            -	release version
     -	commit
-    -	run verify.bat
+    -	run publish.bat
     -	publish on github
+    -	run verify.bat
