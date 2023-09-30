@@ -1,8 +1,10 @@
-﻿using MindGame.Models;
+﻿using MindGame.GameProperties;
+using MindGame.Models;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,12 +28,22 @@ namespace MindGame
         public bool UseTag { get => useTag; set => SetValue(ref useTag, value); }
     }
 
+    public class MindGameCategorySettings : ObservableObject
+    {
+        public string LabelHandle { get; set; }
+        public bool UseCategory { get; set; }
+        public IMindGameProperty Type { get; set; }
+        public Guid Guid { get; set; }
+    }
+
     public class MindGameSettingsViewModel : ObservableObject, ISettings
     {
         private readonly MindGame plugin;
         private MindGameSettings editingClone { get; set; }
 
         private MindGameSettings settings;
+        private ObservableCollection<MindGameCategorySettings> categories;
+
         public MindGameSettings Settings
         {
             get => settings;
@@ -41,6 +53,8 @@ namespace MindGame
                 OnPropertyChanged();
             }
         }
+
+        public ObservableCollection<MindGameCategorySettings> Categories { get => categories; set => categories = value; }
 
         internal void Clear(string property)
         {
@@ -67,6 +81,30 @@ namespace MindGame
             {
                 Settings = new MindGameSettings();
             }
+
+            IMindGameProperty[] propertyTypes = new IMindGameProperty[] {
+                new MindGameGenre(),
+                new MindGameCompletion(),
+                new MindGameFeature(),
+                new MindGameTag(),
+                new MindGameCategory()
+            };
+            
+            categories = new ObservableCollection<MindGameCategorySettings>();
+            propertyTypes.ToList().ForEach(type =>
+            {
+                plugin.Data.IgnoredProperites.TryGetValue(type, out List<Guid> ignoredProperites);
+
+                MindGameCategorySettings category = new MindGameCategorySettings()
+                {
+                    Type = type,
+                };
+
+                
+
+                categories.Add(category)
+            })
+
         }
 
         public void BeginEdit()
