@@ -18,6 +18,6 @@ namespace MindGame.GameProperties
 
         public List<Guid> GetIds(Game game) => new List<Guid>() { game.CompletionStatusId } ?? new List<Guid>();
 
-        public bool IsAllowed(MindGameSettings settings) => settings.UseCompletionStatus;
+        public bool IsAllowed(MindGameSettings settings) => settings.Settings.ContainsKey(Name) ? settings.Settings[Name] : true;
     }
 }

@@ -14,7 +14,7 @@ namespace MindGame.Models
         public Dictionary<string, List<Guid>> IgnoredProperites { get => ignoredProperites; set => ignoredProperites = value; }
 
         [DontSerialize]
-        private string Path => System.IO.Path.Combine(API.Instance.Addons.Plugins.FirstOrDefault(p => p.GetType() == typeof(MindGame)).GetPluginUserDataPath(),"data.json");
+        private string Path => System.IO.Path.Combine(API.Instance.Addons.Plugins.OfType<MindGamePlugin>().FirstOrDefault().GetPluginUserDataPath(),"data.json");
 
         public void Load()
         {

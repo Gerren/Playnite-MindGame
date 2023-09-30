@@ -1,13 +1,10 @@
 ﻿AddonId: gerren-mindgame
 Packages:
-  - Version: 1.05
-    RequiredApiVersion: 6.8.0
-    ReleaseDate: 2023-02-12
-    PackageUrl: https://github.com/Gerren/Playnite-MindGame/releases/download/release_1_05/gerren-mindgame_1_05.pext
+  - Version: 1.06
+    RequiredApiVersion: 6.9.0
+    ReleaseDate: 2023-09-30
+    PackageUrl: https://github.com/Gerren/Playnite-MindGame/releases/download/release_1_06/gerren-mindgame_1_06.pext
     Changelog:
-      - HOTFIX Correct version of API.
-      - Binary search
-      - Adjusted styles
-      - New icon
-      - Removed ability to remove conditions
-      - Added endstate
+      - Updated Playnite API
+      - Persistent state
+      - Reworked settings, remove selected ignored properties

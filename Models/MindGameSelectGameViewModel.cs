@@ -12,13 +12,15 @@ namespace MindGame.Models
 {
     public class MindGameSelectGameViewModel : ObservableObject
     {
+        public static MindGameSelectGameViewModel Instance { get; set; }
+
         private bool useCurrentFilter = true; //API.Instance.MainView.FilteredGames
         private ObservableCollection<Game> games = new ObservableCollection<Game>();
         private ObservableCollection<MindGameCondition> conditions = new ObservableCollection<MindGameCondition>();
         private MindGameCondition currentCondition = new MindGameCondition();
         private Game game;
         private RelayCommand<Guid> _GoToGame;
-        private readonly MindGame app;
+        private readonly MindGamePlugin app;
         private readonly Random random = new Random();
 
         public bool UseCurrentFilter { get => useCurrentFilter; set => SetValue(ref useCurrentFilter, value); } //LOCRandomGameLimistToFilter
@@ -30,7 +32,7 @@ namespace MindGame.Models
 
         public bool HasGame => games.Any();
 
-        internal void Init()
+        internal void DoInit()
         {
             NoMore = false;
             ReadGames();
@@ -38,10 +40,29 @@ namespace MindGame.Models
             Next();
         }
 
+        internal void Init()
+        {
+            if (Instance != null)
+            {
+                Conditions = Instance.Conditions;
+                CurrentCondition = Instance.CurrentCondition;
+                Game = Instance.Game;
+                Games = Instance.Games;
+                NoMore = Instance.NoMore;
+                Prompt = Instance.Prompt;
+                UseCurrentFilter = Instance.UseCurrentFilter;
+            }
+            else
+            {
+                DoInit();
+            }
+            Instance = this;
+        }
+
 
         public MindGameSelectGameViewModel()
         {
-            app = (MindGame)API.Instance.Addons.Plugins.FirstOrDefault(p => p.GetType() == typeof(MindGame));
+            app = (MindGamePlugin)API.Instance.Addons.Plugins.FirstOrDefault(p => p.GetType() == typeof(MindGamePlugin));
             _GoToGame = new RelayCommand<Guid>((Id) =>
             {
                 API.Instance.MainView.SelectGame(Id);
@@ -62,6 +83,7 @@ namespace MindGame.Models
                 ResourceProvider.GetString("LOCMindGamePrompt6"),
                 ResourceProvider.GetString("LOCMindGamePrompt7"),
             };
+
         }
 
         private void RollPrompt() => Prompt = prompts[random.Next(prompts.Length)];

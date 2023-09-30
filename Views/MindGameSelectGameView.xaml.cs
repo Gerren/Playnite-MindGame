@@ -39,7 +39,7 @@ namespace MindGame.Views
 
         private void StartAgain(object sender, RoutedEventArgs e)
         {
-            vm.Init();
+            vm.DoInit();
         }
 
         private void Select(object sender, RoutedEventArgs e)

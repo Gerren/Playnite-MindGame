@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MindGame
 {
@@ -19,30 +20,92 @@ namespace MindGame
         private bool useFeature = true;
         private bool useTag = true;
 
-
         // Cant be bothered to do the WPF dynamically
-        public bool UseCategory { get => useCategory; set => SetValue(ref useCategory, value); }
-        public bool UseCompletionStatus { get => useCompletionStatus; set => SetValue(ref useCompletionStatus, value); }
-        public bool UseGenre { get => useGenre; set => SetValue(ref useGenre, value); }
-        public bool UseFeature { get => useFeature; set => SetValue(ref useFeature, value); }
-        public bool UseTag { get => useTag; set => SetValue(ref useTag, value); }
+        [Obsolete]
+        public bool UseCategory
+        {
+            get => useCategory; set
+            {
+                SetValue(ref useCategory, value);
+                Settings["Category"] = value;
+            }
+        }
+        [Obsolete]
+        public bool UseCompletionStatus
+        {
+            get => useCompletionStatus; set
+            {
+                SetValue(ref useCompletionStatus, value);
+                Settings["CompletionStatus"] = value;
+            }
+        }
+        [Obsolete]
+        public bool UseGenre
+        {
+            get => useGenre; set
+            {
+                SetValue(ref useGenre, value);
+                Settings["Genre"] = value;
+            }
+        }
+        [Obsolete]
+        public bool UseFeature
+        {
+            get => useFeature; set
+            {
+                SetValue(ref useFeature, value);
+                Settings["Feature"] = value;
+            }
+        }
+        [Obsolete]
+        public bool UseTag
+        {
+            get => useTag; set
+            {
+                SetValue(ref useTag, value);
+                Settings["GameTag"] = value;
+            }
+        }
+
+        public Dictionary<string, bool> Settings { get; set; } = new Dictionary<string, bool>();
+        [DontSerialize]
+        public ObservableCollection<MindGameCategorySettings> Categories { get; set; } = new ObservableCollection<MindGameCategorySettings>();
     }
 
     public class MindGameCategorySettings : ObservableObject
     {
-        public string LabelHandle { get; set; }
-        public bool UseCategory { get; set; }
+        private bool useCategory;
+
+        public string Label => Type.Label;
+        public string Name => Type.Label;
+        public bool UseCategory
+        {
+            get => useCategory; set
+            {
+                useCategory = value;
+                UseChanged(value);
+            }
+        }
+        public Action<bool> UseChanged { get; set; }
         public IMindGameProperty Type { get; set; }
-        public Guid Guid { get; set; }
+
+        public ObservableCollection<MindGameCategoryItem> Items { get; set; } = new ObservableCollection<MindGameCategoryItem>();
+    }
+
+    public class MindGameCategoryItem
+    {
+        public string Label { get; set; }
+        public Guid Id { get; set; }
+
+        public string TypeName { get; set; }
     }
 
     public class MindGameSettingsViewModel : ObservableObject, ISettings
     {
-        private readonly MindGame plugin;
+        private readonly MindGamePlugin plugin;
         private MindGameSettings editingClone { get; set; }
 
         private MindGameSettings settings;
-        private ObservableCollection<MindGameCategorySettings> categories;
 
         public MindGameSettings Settings
         {
@@ -54,17 +117,10 @@ namespace MindGame
             }
         }
 
-        public ObservableCollection<MindGameCategorySettings> Categories { get => categories; set => categories = value; }
+        public ICommand ClearItem { get; set; }
+        public ICommand ClearAll { get; set; }
 
-        internal void Clear(string property)
-        {
-            if (plugin.Data.IgnoredProperites.TryGetValue(property, out List<Guid> ignoredProperites))
-            {
-                ignoredProperites.Clear();
-            }
-        }
-
-        public MindGameSettingsViewModel(MindGame plugin)
+        public MindGameSettingsViewModel(MindGamePlugin plugin)
         {
             // Injecting your plugin instance is required for Save/Load method because Playnite saves data to a location based on what plugin requested the operation.
             this.plugin = plugin;
@@ -82,6 +138,31 @@ namespace MindGame
                 Settings = new MindGameSettings();
             }
 
+            Init();
+
+            ClearAll = new RelayCommand<MindGameCategorySettings>(type =>
+            {
+                if (plugin.Data.IgnoredProperites.TryGetValue(type.Type.Name, out List<Guid> ignoredProperites))
+                {
+                    ignoredProperites.Clear();
+                }
+                Settings.Categories.First(c => c.Type.Name == type.Type.Name).Items.Clear();
+            });
+            ClearItem = new RelayCommand<MindGameCategoryItem>(item =>
+            {
+                if (plugin.Data.IgnoredProperites.TryGetValue(item.TypeName, out List<Guid> ignoredProperites))
+                {
+                    ignoredProperites.Remove(item.Id);
+                }
+                Settings.Categories.First(c => c.Type.Name == item.TypeName).Items.Remove(item);
+            });
+
+        }
+
+        public void Init()
+        {
+            Settings.Categories.Clear();
+            // TODO put into Data?
             IMindGameProperty[] propertyTypes = new IMindGameProperty[] {
                 new MindGameGenre(),
                 new MindGameCompletion(),
@@ -89,22 +170,28 @@ namespace MindGame
                 new MindGameTag(),
                 new MindGameCategory()
             };
-            
-            categories = new ObservableCollection<MindGameCategorySettings>();
+
             propertyTypes.ToList().ForEach(type =>
             {
-                plugin.Data.IgnoredProperites.TryGetValue(type, out List<Guid> ignoredProperites);
+                plugin.Data.IgnoredProperites.TryGetValue(type.Name, out List<Guid> ignoredProperites);
+
 
                 MindGameCategorySettings category = new MindGameCategorySettings()
                 {
                     Type = type,
+                    UseChanged = (use) => Settings.Settings[type.Name] = use,
+                    UseCategory = Settings.Settings[type.Name],
                 };
 
-                
+                ignoredProperites
+                .Select(ignored => new MindGameCategoryItem() { Id = ignored, Label = type.GetValue(ignored), TypeName = type.Name })
+                .OrderBy(ignored => ignored.Label)
+                .ForEach(item => category.Items.Add(item));
 
-                categories.Add(category)
-            })
 
+
+                Settings.Categories.Add(category);
+            });
         }
 
         public void BeginEdit()

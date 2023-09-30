@@ -1,5 +1,6 @@
 ﻿using MindGame.Models;
 using Playnite.SDK;
+using Playnite.SDK.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ using System.Windows.Shapes;
 
 namespace MindGame
 {
-    public partial class MindGameSettingsView : UserControl
+    public partial class MindGameSettingsView : PluginUserControl
     {
         public MindGameSettingsView()
         {
@@ -28,7 +29,7 @@ namespace MindGame
         {
             Button button = sender as Button;
             MindGameSettingsViewModel settings = (MindGameSettingsViewModel)this.DataContext;
-            settings.Clear(button.Name);
+            //settings.Clear(button.Name);
         }
     }
 }

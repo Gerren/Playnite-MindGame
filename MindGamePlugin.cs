@@ -16,29 +16,37 @@ using System.Windows.Media;
 
 namespace MindGame
 {
-    public class MindGame : GenericPlugin
+    public class MindGamePlugin : GenericPlugin
     {
         private static readonly ILogger logger = LogManager.GetLogger();
         private MindGameData data;
+        private MindGameSettingsViewModel settings1;
         private readonly IMindGameProperty[] propertyTypes;
         private readonly MindGameViewSidebar side;
 
-        private MindGameSettingsViewModel settings { get; set; }
+        private MindGameSettingsViewModel settings { 
+            get 
+            { 
+                settings1 = settings1 ?? new MindGameSettingsViewModel(this);
+                settings1.Init();
+                return settings1; 
+            }
+            set => settings1 = value; 
+        }
         internal MindGameSettings Settings => settings.Settings;
 
         public override Guid Id { get; } = Guid.Parse("1f0c2867-28cf-4960-a2fc-869ee018664a");
 
         public IMindGameProperty[] PropertyTypes { get => propertyTypes; }
 
-        public MindGame(IPlayniteAPI api) : base(api)
+        public MindGamePlugin(IPlayniteAPI api) : base(api)
         {
-            settings = new MindGameSettingsViewModel(this);
             Properties = new GenericPluginProperties
             {
                 HasSettings = true
             };
             // Implement class, edit settings, edit settings WPF, that's all
-            propertyTypes = new IMindGameProperty[] { 
+            propertyTypes = new IMindGameProperty[] {
                 new MindGameGenre(),
                 new MindGameCompletion(),
                 new MindGameFeature(),

@@ -31,13 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Playnite.SDK, Version=6.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\FilterMaster\packages\PlayniteSDK.6.8.0\lib\net462\Playnite.SDK.dll</HintPath>
+    <Reference Include="Playnite.SDK, Version=6.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PlayniteSDK.6.9.0\lib\net462\Playnite.SDK.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,6 +50,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="verify.bat" />
     <None Include="publish.bat" />
     <Compile Include="GameProperties\MindGameCompletion.cs" />
@@ -57,7 +60,7 @@
     <Compile Include="Models\QuestionVisibleConverter.cs" />
     <Compile Include="PlayniteImageConverter.cs" />
     <Compile Include="PlayniteImageTaskConverter.cs" />
-    <Compile Include="MindGame.cs" />
+    <Compile Include="MindGamePlugin.cs" />
     <Compile Include="Models\MindGameCondition.cs" />
     <Compile Include="Models\MindGameData.cs" />
     <Compile Include="GameProperties\IMindGameProperty.cs" />
@@ -78,7 +81,6 @@
     </None>
     <None Include="Gerren_MindGame.yaml" />
     <None Include="installer.yaml" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Localization\*.xaml">

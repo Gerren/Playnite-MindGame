@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MindGame.MindGameSettingsView"
+﻿<PluginUserControl x:Class="MindGame.MindGameSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"             
              xmlns:local="clr-namespace:MindGame"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,45 +6,48 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance Type=local:MindGameSettings}">
-    <StackPanel>
-        <TextBlock Text="{DynamicResource LOCMindGameUseFields}" d:Text="LOCUseFields"/>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="80"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource LOCCategoryLabel}" d:Text="LOCCategoryLabel"/>
-            <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Settings.UseCategory}"/>
-            <Button  Grid.Row="0"  Grid.Column="2" Content="{DynamicResource LOCMindGameClearIgnoredFields}" d:Content="Clear" Click="ClearList"  Name="Category"/>
+             d:DataContext="{d:DesignInstance Type=local:MindGameSettingsViewModel}"
+             Name="main">
+    
+    <DockPanel>
+        <TextBlock Text="{DynamicResource LOCMindGameUseFields}" d:Text="LOCUseFields" DockPanel.Dock="Top"/>
+        <TabControl ItemsSource="{Binding Settings.Categories}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Label}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>                
+                <DataTemplate>
+                    <DockPanel>
+                        <CheckBox Content="Use" IsChecked="{Binding UseCategory}" Margin="15,10" DockPanel.Dock="Top"/>
+                        <WrapPanel DockPanel.Dock="Bottom" Margin="10">
+                            <Button Content="{DynamicResource LOCMindGameClearIgnoredFields}" d:Content="LOCMindGameClearIgnoredFields" 
+                            Command="{Binding DataContext.ClearAll, ElementName=main}" CommandParameter="{Binding}"/>
+                        </WrapPanel>
+                        <ScrollViewer>
+                            <ItemsControl ItemsSource="{Binding Items}">
+                                <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <WrapPanel>
+                                            <Button Content="x" d:Content="x" Margin="10,0"
+                                                        Command="{Binding DataContext.ClearItem, ElementName=main}" CommandParameter="{Binding}"/>
+                                            <Label Content="{Binding Label}" d:Content="Label"/>
+                                        </WrapPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </DockPanel>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
             
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource LOCCompletionStatus}" d:Text="LOCCompletionStatus"/>
-            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Settings.UseCompletionStatus}"/>
-            <Button  Grid.Row="1" Grid.Column="2" Content="{DynamicResource LOCMindGameClearIgnoredFields}" d:Content="Clear" Click="ClearList" Name="CompletionStatus"/>
-            
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource LOCGenreLabel}" d:Text="LOCGenreLabel"/>
-            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Settings.UseGenre}"/>
-            <Button  Grid.Row="2"  Grid.Column="2" Content="{DynamicResource LOCMindGameClearIgnoredFields}" d:Content="Clear" Click="ClearList" Name="Genre"/>
-            
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource LOCFeatureLabel}" d:Text="LOCFeatureLabel"/>
-            <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding Settings.UseFeature}"/>
-            <Button  Grid.Row="3"   Grid.Column="2" Content="{DynamicResource LOCMindGameClearIgnoredFields}" d:Content="Clear" Click="ClearList" Name="Feature"/>
-            
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource LOCTagLabel}" d:Text="LOCTagLabel"/>
-            <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Settings.UseTag}"/>
-            <Button  Grid.Row="4"  Grid.Column="2" Content="{DynamicResource LOCMindGameClearIgnoredFields}" d:Content="Clear" Click="ClearList" Name="GameTag"/>
-            
-        </Grid>
-    </StackPanel>
-</UserControl>
+        </TabControl>
+
+    </DockPanel>
+</PluginUserControl>
