@@ -175,6 +175,10 @@ namespace MindGame
             {
                 plugin.Data.IgnoredProperites.TryGetValue(type.Name, out List<Guid> ignoredProperites);
 
+                if (!Settings.Settings.ContainsKey(type.Name))
+                {
+                    Settings.Settings[type.Name] = true;
+                }
 
                 MindGameCategorySettings category = new MindGameCategorySettings()
                 {
@@ -183,7 +187,7 @@ namespace MindGame
                     UseCategory = Settings.Settings[type.Name],
                 };
 
-                ignoredProperites
+                ignoredProperites?
                 .Select(ignored => new MindGameCategoryItem() { Id = ignored, Label = type.GetValue(ignored), TypeName = type.Name })
                 .OrderBy(ignored => ignored.Label)
                 .ForEach(item => category.Items.Add(item));

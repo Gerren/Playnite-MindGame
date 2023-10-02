@@ -10,7 +10,6 @@
              Name="main">
     
     <DockPanel>
-        <TextBlock Text="{DynamicResource LOCMindGameUseFields}" d:Text="LOCUseFields" DockPanel.Dock="Top"/>
         <TabControl ItemsSource="{Binding Settings.Categories}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
