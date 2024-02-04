@@ -111,7 +111,9 @@
                     <RowDefinition Height="24"/>
                 </Grid.RowDefinitions>
                 <ScrollViewer Grid.Row="0">
-                    <StackPanel Grid.Column="1">
+                    <VirtualizingStackPanel IsVirtualizing="True"
+                                            VirtualizationMode="Recycling"
+                                            Grid.Column="1">
                         <ItemsControl ItemsSource="{Binding Games}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -134,7 +136,7 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                    </StackPanel>
+                    </VirtualizingStackPanel>
                 </ScrollViewer>
                 <CheckBox Grid.Row="1" IsChecked="{Binding UseCurrentFilter}" Checked="Filtered" Unchecked="Filtered">
                     <TextBlock Text="{DynamicResource LOCRandomGameLimistToFilter}" d:Text="Currently filtered games only"
